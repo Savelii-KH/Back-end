@@ -1,11 +1,11 @@
 <?php
-    if (isset($_GET['search'])) {
-        $search = $_GET['search'];
-    }
 
-    if (isset($_GET['url'])) {
-        $url = $_GET['url'];
-    }
+if (isset($_GET['search']) && !empty($_GET['search'])) {
+    $search = $_GET['search'];
+}
+if (isset($_GET['url']) && !empty($_GET['url'])) {
+    $url = $_GET['url'];
+}
 
     if (isset($search)) {
         $cx = "478f2ddeb6dd8409b";
@@ -17,10 +17,11 @@
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $resultJson = curl_exec($ch);
+        curl_close($ch);
 
         $items = json_decode($resultJson, true);
-
-        curl_close($ch);
+    } elseif (isset($url)) {
+        echo "<script>window.location.href = \"$url\";</script>";
     }
 ?>
 <!DOCTYPE html>
@@ -33,9 +34,9 @@
 <h2>KoshaNet</h2>
 <form method="GET" action="myBrowser.php">
     <label for="url">URL:</label>
-    <input type="url" id="url" name="url" value="">
+    <input type="url" id="url" name="url">
     <label for="search">Search:</label>
-    <input type="text" id="search" name="search" value=""><br><br>
+    <input type="text" id="search" name="search"><br><br>
     <input type="submit" value="Submit">
 </form>
 <?php
@@ -54,9 +55,8 @@ if (isset($search) && isset($items['items'])) {
             </div>
             <?php
         }
-    } else {
-    echo 'huy';
-}
+    }
+
 ?>
 </body>
 </html>
